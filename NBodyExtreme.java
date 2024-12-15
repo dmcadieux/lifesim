@@ -33,8 +33,8 @@ public class NBodyExtreme {
             for (int i = 0; i < size; i++) {
                 // To not fly off the screen
                 if (bodies[i].xxPos >= radius || bodies[i].xxPos <= -radius || bodies[i].yyPos >= radius || bodies[i].yyPos <= -radius) {
-                    bodies[i].xxVel = (-bodies[i].xxVel) * 0.5;
-                    bodies[i].yyVel = (-bodies[i].yyVel) * 0.5;
+                    bodies[i].xxVel = (-bodies[i].xxVel);
+                    bodies[i].yyVel = (-bodies[i].yyVel);
                 }
                 bodies[i].update(dt, xForces[i], yForces[i]);
             }
