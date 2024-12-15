@@ -12,26 +12,45 @@ public class BodyExtreme {
     public String color;
     public String imgFileName;
 
-    private double redRed = 6.50001;
+    private double redRed = -0.10;
     private double redYellow = 0;
-    private double redGreen = -200;
-    private double redBlue = 310.5;
+    private double redGreen = -0.20;
+    private double redBlue = 0;
 
-    private double yellowRed = 26;
-    private double yellowYellow = -460;
-    private double yellowGreen = 14;
-    private double yellowBlue = 999;
+    private double yellowRed = 0;
+    private double yellowYellow = 0.15;
+    private double yellowGreen = -0.15;
+    private double yellowBlue = 0;
 
-    private double greenRed = 0;
-    private double greenYellow = 0;
-    private double greenGreen = 16.5;
+    private double greenRed = -0.17;
+    private double greenYellow = 0.34;
+    private double greenGreen = 80;
     private double greenBlue = 0;
 
-    private double blueRed = 1.5;
-    private double blueYellow = 2.5;
-    private double blueGreen = 15.6;
-    private double blueBlue = -13.5;
+    private double blueRed = -600;
+    private double blueYellow = -232;
+    private double blueGreen = -500;
+    private double blueBlue = 55;
 
+    private double maxRedRed;
+    private double maxRedGreen;
+    private double maxRedYellow;
+    private double maxRedBlue;
+
+    private double maxYellowRed;
+    private double maxYellowYellow;
+    private double maxYellowGreen;
+    private double maxYellowBlue;
+
+    private double maxGreenRed;
+    private double maxGreenYellow;
+    private double maxGreenGreen;
+    private double maxGreenBlue;
+
+    private double maxBlueRed;
+    private double maxBlueYellow;
+    private double maxBlueGreen;
+    private double maxBlueBlue;
 
 
     public BodyExtreme(double xxPos, double yyPos, double xxVel, double yyVel, double mass, String color, String imgFileName) {
@@ -68,8 +87,10 @@ public class BodyExtreme {
         double distance = this.calcDistance(b);
         if (distance == 0) {
             distance = 1E-7;
-        }
-        return (G * this.mass * b.mass) / (distance * distance);
+        } /*else if (this.calcDistance(b) > this.distanceRule(b.color, this.color)) {
+            return 0;
+        } */
+        return ((G * this.mass * b.mass) / (distance * distance)) * this.rule(b.color, this.color);
     }
 
     public double calcForceExertedByX(BodyExtreme b) {
@@ -86,7 +107,7 @@ public class BodyExtreme {
         for (BodyExtreme b : bodies) {
             if (this != b) {
                 // Calculates net force scaled by color interaction rule
-                xTotal += this.calcForceExertedByX(b) * this.rule(b.color, this.color);
+                xTotal += this.calcForceExertedByX(b);
             }
         }
         return xTotal;
@@ -97,7 +118,7 @@ public class BodyExtreme {
         for (BodyExtreme b : bodies) {
             if (this != b) {
                 // Calculates net force scaled by color interaction rule
-                yTotal += this.calcForceExertedByY(b) * this.rule(b.color, this.color);
+                yTotal += this.calcForceExertedByY(b);
             }
         }
         return yTotal;
@@ -124,6 +145,18 @@ public class BodyExtreme {
         if (c1.equals("blue") && c2.equals("yellow")) { return blueYellow; }
         if (c1.equals("blue") && c2.equals("green")) { return blueGreen; }
         if (c1.equals("blue") && c2.equals("blue")) { return blueBlue; }
+
+        return 0.0;
+    }
+
+    public double distanceRule(String d1, String d2) {
+        if (d1.equals("red") && d2.equals("red")) { return maxRedRed; }
+        else if(d1.equals("red") && d2.equals("yellow")) { return maxRedYellow; }
+        else if(d1.equals("red") && d2.equals("green")) { return maxRedGreen; }
+        else if(d1.equals("red") && d2.equals("blue")) { return maxRedBlue; }
+
+        else if(d1.equals("green") && d2.equals("red")) { return maxGreenRed; }
+        else if(d1.equals("green") && d2.equals("red")) { return maxGreenRed; }
 
         return 0.0;
     }
