@@ -1,5 +1,7 @@
 import examples.StdDraw;
 
+import static java.lang.Math.pow;
+
 public class NBodyExtreme {
     public static void main(String[] args) {
         double T = Double.parseDouble(args[0]);
@@ -31,11 +33,47 @@ public class NBodyExtreme {
             }
 
             for (int i = 0; i < size; i++) {
-                // To not fly off the screen
-                if (bodies[i].xxPos >= radius || bodies[i].xxPos <= -radius || bodies[i].yyPos >= radius || bodies[i].yyPos <= -radius) {
-                    bodies[i].xxVel = (-bodies[i].xxVel);
-                    bodies[i].yyVel = (-bodies[i].yyVel);
+                boolean xCollision = false, yCollision = false;
+
+                // Determine which wall was hit
+                if (bodies[i].xxPos >= radius) {
+                    bodies[i].xxPos = radius;  // Prevent sticking outside
+                    xCollision = true;
+                } else if (bodies[i].xxPos <= -radius) {
+                    bodies[i].xxPos = -radius;  // Prevent sticking outside
+                    xCollision = true;
                 }
+
+                if (bodies[i].yyPos >= radius) {
+                    bodies[i].yyPos = radius;  // Prevent sticking outside
+                    yCollision = true;
+                } else if (bodies[i].yyPos <= -radius) {
+                    bodies[i].yyPos = -radius;  // Prevent sticking outside
+                    yCollision = true;
+                }
+
+                // Calculate reflection if a collision occurred
+                if (xCollision || yCollision) {
+                    // Current velocity vector
+                    double vx = bodies[i].xxVel;
+                    double vy = bodies[i].yyVel;
+
+                    // Normal vector (depends on which wall was hit)
+                    double nx = xCollision ? (bodies[i].xxPos > 0 ? 1 : -1) : 0;
+                    double ny = yCollision ? (bodies[i].yyPos > 0 ? 1 : -1) : 0;
+
+                    // Dot product
+                    double dotProduct = vx * nx + vy * ny;
+
+                    // Reflection vector calculation
+                    double rx = vx - 2 * dotProduct * nx;
+                    double ry = vy - 2 * dotProduct * ny;
+
+                    // Reduce velocity by 75%
+                    bodies[i].xxVel = rx * 0.75;
+                    bodies[i].yyVel = ry * 0.75;
+                }
+
                 bodies[i].update(dt, xForces[i], yForces[i]);
             }
 

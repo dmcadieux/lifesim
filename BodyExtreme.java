@@ -12,25 +12,25 @@ public class BodyExtreme {
     public String color;
     public String imgFileName;
 
-    private double redRed = -0.10;
-    private double redYellow = 0;
-    private double redGreen = -0.20;
-    private double redBlue = 0;
+    private double redRed = 0.17;
+    private double redYellow = -66666;
+    private double redGreen = -66666;
+    private double redBlue = -66666;
 
-    private double yellowRed = 0;
+    private double yellowRed = -66666;
     private double yellowYellow = 0.15;
     private double yellowGreen = -0.15;
     private double yellowBlue = 0;
 
-    private double greenRed = -0.17;
+    private double greenRed = -66666;
     private double greenYellow = 0.34;
     private double greenGreen = 80;
     private double greenBlue = 0;
 
-    private double blueRed = -600;
+    private double blueRed = -66666;
     private double blueYellow = -232;
     private double blueGreen = -500;
-    private double blueBlue = 55;
+    private double blueBlue = 0;
 
     private double maxRedRed;
     private double maxRedGreen;
