@@ -84,13 +84,23 @@ public class BodyExtreme {
     }
 
     public double calcForceExertedBy(BodyExtreme b) {
-        double distance = this.calcDistance(b);
-        if (distance == 0) {
-            distance = 1E-7;
-        } /*else if (this.calcDistance(b) > this.distanceRule(b.color, this.color)) {
+
+        // Corrects for 0 distance
+        double distance = Math.max(this.calcDistance(b), 1E-7);
+
+                 /* if (this.calcDistance(b) > this.distanceRule(b.color, this.color)) {
             return 0;
         } */
-        return ((G * this.mass * b.mass) / (distance * distance)) * this.rule(b.color, this.color);
+
+        // Force calc
+        double value = ((G * this.mass * b.mass) / (distance * distance)) * this.rule(b.color, this.color);
+
+        // Fixes broken values
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            return 0;
+        }
+
+        return value;
     }
 
     public double calcForceExertedByX(BodyExtreme b) {
