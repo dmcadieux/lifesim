@@ -27,12 +27,9 @@ public class NBodyExtreme {
         for (double time = 0; time <= T; time = time + dt) {
             xForces = new double[size];
             yForces = new double[size];
-            for (int i = 0; i < size; i++) {
-                xForces[i] = bodies[i].calcNetForceExertedByX(bodies);
-                yForces[i] = bodies[i].calcNetForceExertedByY(bodies);
-            }
 
             for (int i = 0; i < size; i++) {
+
                 boolean xCollision = false, yCollision = false;
 
                 // Determine which wall was hit
@@ -72,6 +69,16 @@ public class NBodyExtreme {
                     // Reduce velocity by 75%
                     bodies[i].xxVel = rx * 0.75;
                     bodies[i].yyVel = ry * 0.75;
+                }
+
+                xForces[i] = bodies[i].calcNetForceExertedByX(bodies);
+                yForces[i] = bodies[i].calcNetForceExertedByY(bodies);
+            }
+
+            for (int i = 0; i < size; i++) {
+
+                if (Double.isNaN(bodies[i].xxVel) || Double.isNaN(bodies[i].yyVel)) {
+                    System.out.println("Body: " + i + ", XVel: " + bodies[i].xxVel + ", YVel: " + bodies[i].yyVel);
                 }
 
                 bodies[i].update(dt, xForces[i], yForces[i]);

@@ -77,10 +77,16 @@ public class BodyExtreme {
         if (this == b) {
             return Double.MAX_VALUE;
         }
+
         double distX = b.xxPos - this.xxPos;
         double distY = b.yyPos - this.yyPos;
+
+        double distance = Math.sqrt((distX * distX) + (distY * distY));
+
+        distance = Math.max(distance, 1e-6);
+
         // Pythagoras
-        return Math.sqrt((distX * distX) + (distY * distY));
+        return distance;
     }
 
     public double calcForceExertedBy(BodyExtreme b) {
@@ -95,20 +101,37 @@ public class BodyExtreme {
         // Force calc
         double value = ((G * this.mass * b.mass) / (distance * distance)) * this.rule(b.color, this.color);
 
+        value = Math.min(value, 1e10);
+
         // Fixes broken values
         if (Double.isNaN(value) || Double.isInfinite(value)) {
-            return 0;
+            return 1e-7;
         }
+
 
         return value;
     }
 
     public double calcForceExertedByX(BodyExtreme b) {
-        return (this.calcForceExertedBy(b) * (b.xxPos - this.xxPos)) / this.calcDistance(b);
+
+        double result = (this.calcForceExertedBy(b) * (b.xxPos - this.xxPos)) / this.calcDistance(b);
+
+        if (Double.isNaN(result) || Double.isInfinite(result)) {
+            return 0.0;
+        }
+
+        return result;
     }
 
     public double calcForceExertedByY(BodyExtreme b) {
-        return (this.calcForceExertedBy(b) * (b.yyPos - this.yyPos)) / this.calcDistance(b);
+
+        double result = (this.calcForceExertedBy(b) * (b.yyPos - this.yyPos)) / this.calcDistance(b);
+
+        if (Double.isNaN(result) || Double.isInfinite(result)) {
+            return 1e-7;
+        }
+
+        return result;
     }
 
     public double calcNetForceExertedByX(BodyExtreme[] bodies) {
@@ -178,6 +201,7 @@ public class BodyExtreme {
         this.yyVel = this.yyVel + (dt * aY);
         this.xxPos = this.xxPos + (dt * xxVel);
         this.yyPos = this.yyPos + (dt * yyVel);
+
     }
 
     public void draw() {
